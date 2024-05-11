@@ -16,7 +16,7 @@ export const userRegisterPost: FastifySchema = {
         200: {
             type: 'object',
             properties: {
-                hello: { type: 'string' },
+                message: { type: 'string' },
                 token: { type: 'string' }
             }
         },
