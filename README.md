@@ -1,7 +1,9 @@
 # Haciendola Backend
 
 ## Live Demo
-[Demo](https://haciendola-tech-backend-test.onrender.com/docs)
+[Documentacion](https://haciendola-tech-backend-test.onrender.com/docs)
+
+_Render Free Tier, tienes que esperar unos segundos a que el servidor se inicie cuando se usa por primera vez. Se recomienda entrar primero a este enlace para ver los endpoints_
 
 ## Descripción
 
