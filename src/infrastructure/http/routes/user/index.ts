@@ -5,6 +5,8 @@ import { createToken } from "../../../../libs/jwt";
 import { decrypt, encrypt } from "../../../../libs/crypto";
 import { UserService } from "../../../../application/UserService";
 import { UserAdapter as SequelizeUserAdapter } from "../../../sqlite/UserAdapter";
+import { ok } from "assert";
+import { User } from "../../../../domain/user/User";
 
 interface LoginRequestBody {
     email: string;
@@ -41,20 +43,20 @@ const userRoutes = async (fastify: FastifyInstance, options: any) => {
 
             if (!user) {
                 reply.code(404);
-                return { message: "Usuario no encontrado" }
+                return { message: "Usuario no encontrado", ok: false}
             }
 
             if (decrypt(user.password) !== password) {
                 reply.code(400);
-                return { message: "Contraseña incorrecta" }
+                return { message: "Contraseña incorrecta", ok: false}
             }
 
             let token = createToken({ email, password: user.password });
 
-            return { message: "Login Exitoso", token };
+            return { message: "Login Exitoso", token, ok: true }
         } catch (error) {
             reply.code(500);
-            return { message: "Error en el servidor" }
+            return { message: "Error en el servidor", ok: false }
         }
     })
 
@@ -67,21 +69,27 @@ const userRoutes = async (fastify: FastifyInstance, options: any) => {
 
         if (!user) {
             reply.code(404);
-            return { message: "Usuario no encontrado" }
+            return { message: "Usuario no encontrado", ok: false }
         }
 
-        //comparate username
         if (user.username !== username) {
             reply.code(403);
-            return { message: "No tienes permisos para realizar esta acción" }
+            return { message: "No tienes permisos para realizar esta acción", ok: false}
+        }
+
+        const userData: User = {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            password: "",
         }
         
         const encryptPassword = encrypt(password);
-        user.password = encryptPassword;
+        userData.password = encryptPassword;
 
-        await userService.update(user);
+        await userService.update(userData);
 
-        return { message: "Contraseña actualizada" }
+        return { message: "Contraseña actualizada", ok: true }
     })
 }
 

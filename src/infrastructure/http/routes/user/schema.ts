@@ -52,13 +52,15 @@ export const userLoginSchema: FastifySchema = {
             type: 'object',
             properties: {
                 message: { type: 'string' },
-                token: { type: 'string' }
+                token: { type: 'string' },
+                ok: { type: 'boolean' }
             }
         },
         400: {
             type: 'object',
             properties: {
-                message: { type: 'string' }
+                message: { type: 'string' },
+                ok: { type: 'boolean' }
             }
         }
     }
@@ -80,12 +82,14 @@ export const resetPasswordSchema: FastifySchema = {
             type: 'object',
             properties: {
                 message: { type: 'string' },
+                ok: { type: 'boolean'}
             }
         },
         400: {
             type: 'object',
             properties: {
-                message: { type: 'string' }
+                message: { type: 'string' },
+                ok: { type: 'boolean'}
             }
         }
     }
