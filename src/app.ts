@@ -14,6 +14,7 @@ async function startServer() {
     await builderServer(app);
 
     const PORT_ENV = Number(process.env.PORT) || 3000;
+    console.log(`Server running on port ${PORT_ENV}`);
 
     app.listen({ port: PORT_ENV})
 }
