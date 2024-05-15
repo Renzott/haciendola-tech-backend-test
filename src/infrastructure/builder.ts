@@ -6,6 +6,7 @@ import { handleError, handleNotFound } from "./http/errors";
 
 import productRoutes from './http/routes/products'
 import userRoutes from "./http/routes/user";
+import homeRoutes from "./http/routes/home";
 
 export default async function (app: FastifyInstance) {
     app.setErrorHandler(handleError)
@@ -30,6 +31,7 @@ export default async function (app: FastifyInstance) {
 
     app.register(cors)
     
+    app.register(homeRoutes)
     app.register(productRoutes, { prefix: '/api/v1'})
     app.register(userRoutes, { prefix: '/api/v1'})
     

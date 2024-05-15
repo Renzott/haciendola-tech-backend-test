@@ -16,8 +16,6 @@ async function startServer() {
     const PORT_ENV = Number(process.env.PORT) || 3000;
     const HOST = ("RENDER" in process.env) ? `0.0.0.0` : `localhost`;
 
-    console.log(`Server running on port ${PORT_ENV}`);
-
     app.listen({ host: HOST, port: PORT_ENV });
 }
 

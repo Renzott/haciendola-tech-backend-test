@@ -68,9 +68,10 @@ export const resetPasswordSchema: FastifySchema = {
     tags: ['User'],
     body: {
         type: 'object',
-        required: ['email', 'password'],
+        required: ['email', 'password', 'username'],
         properties: {
             email: { type: 'string' },
+            username: { type: 'string' },
             password: { type: 'string' }
         }
     },

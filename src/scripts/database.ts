@@ -26,11 +26,13 @@ export const initDatabase = async () => {
         await database.sync();
         let data = await csv.fromFile(DATA_PATH);
 
-        const encryptPassword = encrypt("strongpassword")
+        const password = process.env.USER_PASSWORD || "strongpassword";
+
+        const encryptPassword = encrypt(password)
 
         userService.create({
-            email: "root@mail.com",
-            username: "ADMIN",
+            email: process.env.USER_EMAIL || "root@mail.com",
+            username: process.env.USER_NAME || "root",
             password: encryptPassword
         })
 

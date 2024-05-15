@@ -30,7 +30,7 @@ const userRoutes = async (fastify: FastifyInstance, options: any) => {
         return { message: "Registro Exitoso", token };
     })
 
-    fastify.post('/login', { schema: userLoginSchema }, async (request: FastifyRequest<{ Body: LoginRequestBody }>, _reply) => {
+    fastify.post('/login', { schema: userLoginSchema }, async (request: FastifyRequest<{ Body: LoginRequestBody }>, reply) => {
 
         try {
             const { email, password } = request.body;
@@ -40,10 +40,12 @@ const userRoutes = async (fastify: FastifyInstance, options: any) => {
             let user = await userService.findByEmail(email);
 
             if (!user) {
+                reply.code(404);
                 return { message: "Usuario no encontrado" }
             }
-            console.log(user.password);
+
             if (decrypt(user.password) !== password) {
+                reply.code(400);
                 return { message: "Contraseña incorrecta" }
             }
 
@@ -51,21 +53,29 @@ const userRoutes = async (fastify: FastifyInstance, options: any) => {
 
             return { message: "Login Exitoso", token };
         } catch (error) {
+            reply.code(500);
             return { message: "Error en el servidor" }
         }
     })
 
-    fastify.put('/resetpassword', { schema: resetPasswordSchema }, async (request: FastifyRequest<{ Body: RegisterRequestBody }>, _reply) => {
-        const { email, password } = request.body;
+    fastify.put('/resetpassword', { schema: resetPasswordSchema }, async (request: FastifyRequest<{ Body: RegisterRequestBody }>, reply) => {
+        const { email, password, username } = request.body;
 
         const userService = new UserService(new SequelizeUserAdapter);
 
         let user = await userService.findByEmail(email);
 
         if (!user) {
+            reply.code(404);
             return { message: "Usuario no encontrado" }
         }
 
+        //comparate username
+        if (user.username !== username) {
+            reply.code(403);
+            return { message: "No tienes permisos para realizar esta acción" }
+        }
+        
         const encryptPassword = encrypt(password);
         user.password = encryptPassword;
 
