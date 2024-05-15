@@ -1,11 +1,9 @@
 import { FastifyInstance, FastifyRequest, FastifySchema } from "fastify";
-import authMiddleware from "../../middlewares/authMiddleware";
 import { resetPasswordSchema, userLoginSchema, userRegisterPost } from "./schema";
 import { createToken } from "../../../../libs/jwt";
 import { decrypt, encrypt } from "../../../../libs/crypto";
 import { UserService } from "../../../../application/UserService";
 import { UserAdapter as SequelizeUserAdapter } from "../../../sqlite/UserAdapter";
-import { ok } from "assert";
 import { User } from "../../../../domain/user/User";
 
 interface LoginRequestBody {
