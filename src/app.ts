@@ -13,7 +13,9 @@ async function startServer() {
 
     await builderServer(app);
 
-    app.listen({ port: 3000 });
+    const PORT_ENV = Number(process.env.PORT) || 3000;
+
+    app.listen({ port: PORT_ENV})
 }
 
 startServer();
