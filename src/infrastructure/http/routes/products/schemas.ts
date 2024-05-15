@@ -2,6 +2,7 @@ import { FastifySchema } from "fastify";
 
 export const productListGet: FastifySchema = {
     tags: ['Product'],
+    security: [{ Bearer: []}],
     response: {
         200: {
             type: 'object',
@@ -31,6 +32,7 @@ export const productListGet: FastifySchema = {
 
 export const productSearchGet: FastifySchema = {
     tags: ['Product'],
+    security: [{ Bearer: []}],
     querystring: {
         type: 'object',
         properties: {
@@ -69,6 +71,7 @@ export const productSearchGet: FastifySchema = {
 
 export const productPost: FastifySchema = {
     tags: ['Product'],
+    security: [{ Bearer: []}],
     body: {
         type: 'object',
         properties: {
@@ -112,6 +115,7 @@ export const productPost: FastifySchema = {
 
 export const productPut: FastifySchema = {
     tags: ['Product'],
+    security: [{ Bearer: []}],
     body: {
         type: 'object',
         properties: {
@@ -155,6 +159,7 @@ export const productPut: FastifySchema = {
 // param: /product/:id
 export const productDelete: FastifySchema = {
     tags: ['Product'],
+    security: [{ Bearer: []}],
     params: {
         type: 'object',
         properties: {

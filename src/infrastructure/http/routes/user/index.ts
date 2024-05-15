@@ -51,7 +51,6 @@ const userRoutes = async (fastify: FastifyInstance, options: any) => {
 
             return { message: "Login Exitoso", token };
         } catch (error) {
-            console.log(error);
             return { message: "Error en el servidor" }
         }
     })

@@ -17,8 +17,13 @@ export class ProductAdapter implements ProductRepository {
         }
 
         async update(product: Product): Promise<Product> {
-            await this.sequelizeProduct.update(product, { where: { sku: product.sku } });
-            return product;
+            let data = await this.sequelizeProduct.update(product, { where: { sku: product.sku }});
+            
+            if (data[0] === 0) {
+              return Promise.reject(new Error("No se pudo actualizar el producto"));
+            }
+            
+            return Promise.resolve(product);
         }
 
         async delete(id: string): Promise<boolean> {
@@ -34,8 +39,13 @@ export class ProductAdapter implements ProductRepository {
             throw new Error("Method not implemented.");
         }
 
+
         findAll(): Promise<Product[]> {
-            return this.sequelizeProduct.findAll();
+            let page = 1;
+            // get first 10 products to paginate
+            let limit = 10;
+
+            return this.sequelizeProduct.findAll({ offset: (page - 1) * limit, limit: limit });
         }
 
         findAllByTitle(title: string): Promise<Product[] | null> {

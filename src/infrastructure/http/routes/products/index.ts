@@ -1,9 +1,8 @@
-import { FastifyInstance, FastifyRequest } from "fastify";
+import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import authMiddleware from "../../middlewares/authMiddleware";
 import { ProductService } from "../../../../application/ProductService";
 import { ProductAdapter as SequelizeProductAdapter } from "../../../sqlite/ProductAdapter";
 import { productListGet, productPost, productSearchGet, productDelete, productPut } from "./schemas";
-
 
 interface SearchQuery {
     q: string
@@ -55,17 +54,22 @@ const productRoutes = async (fastify: FastifyInstance) => {
         return { data, status: 200 }
     })
 
-    fastify.put('/product', { preHandler: authMiddleware, schema: productPut }, async (request: FastifyRequest) => {
+    fastify.put('/product', { preHandler: authMiddleware, schema: productPut }, async (request: FastifyRequest, reply: FastifyReply) => {
         const productService = new ProductService(new SequelizeProductAdapter);
 
         let product = request.body as ProductRequestBody;
 
-        let data = await productService.update(product);
+        try {
+            let data = await productService.update(product);
+            return { data, status: 200 }
+        } catch (err) {
+            reply.status(400);
+            return { message: (err as Error).message, status: 400 }
+        }
 
-        return { data, status: 200 }
     })
 
-    fastify.delete('/product/:id', { preHandler: authMiddleware, schema: productDelete }, async (request: FastifyRequest) => {
+    fastify.delete('/product/:id', { preHandler: authMiddleware, schema: productDelete }, async (request: FastifyRequest,  reply: FastifyReply) => {
         const productService = new ProductService(new SequelizeProductAdapter);
         let { id } = request.params as ProductParams;
 
@@ -73,7 +77,11 @@ const productRoutes = async (fastify: FastifyInstance) => {
 
         let message = response ? "Producto eliminado" : "Producto no encontrado";
 
-        return { message, status: 200 }
+        let status = response ? 200 : 404;
+
+        reply.status(status);
+
+        return { message, status }
     })
 
 }

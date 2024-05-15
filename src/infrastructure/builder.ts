@@ -11,7 +11,22 @@ export default async function (app: FastifyInstance) {
     app.setErrorHandler(handleError)
     app.setNotFoundHandler(handleNotFound);
 
-    await app.register(swagger)
+    await app.register(swagger,{
+        swagger:{
+            info:{
+                title: 'Haciendola API',
+                description: 'Building a REST API with Fastify',
+                version: '0.1.0'
+            },
+            securityDefinitions:{
+                Bearer:{
+                    type: 'apiKey',
+                    name: 'Authorization',
+                    in: 'header'
+                }
+            },
+        },
+    })
 
     app.register(cors)
     

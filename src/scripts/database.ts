@@ -16,9 +16,10 @@ const csv = csvtojson({
     headers: ["handle", "title", "description", "sku", "grams", "stock", "price", "comparePrice", "barcode"]
 });
 
-(async () => {
+export const initDatabase = async () => {
     try {
         readFileSync(DB_PATH);
+        console.log("Database found, skipping creation...");
     } catch (error) {
         console.log("Database not found, creating database...");
         
@@ -35,5 +36,4 @@ const csv = csvtojson({
 
         SequelizeProduct.bulkCreate(data);
     }
-
-})();
+}
